@@ -1,4 +1,4 @@
-=== MLab Angebote ===
+=== MomentumLab Angebote ===
 Contributors: momentumlab
 Requires at least: 6.0
 Requires PHP: 7.4
@@ -43,6 +43,10 @@ Adresse: https://deine-seite.ch/angebote-erfassen/
 - Keine öffentlichen URLs für Angebote (public=false).
 
 == Changelog ==
+= 2.0.2 =
+* Name «MomentumLab Angebote».
+* Schalter «Automatische Aktualisierungen aktivieren» erscheint direkt nach dem Aktivieren und auch, wenn GitHub kurz nicht erreichbar ist.
+
 = 2.0.1 =
 * Upload über den Plugin-Installer auf Servern mit strenger Firewall: keine base64-/Datei-Lese-Muster mehr im Code.
 
