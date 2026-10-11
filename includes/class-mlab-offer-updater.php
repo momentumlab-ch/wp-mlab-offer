@@ -22,15 +22,24 @@ final class MLab_Offer_Updater {
 		add_filter( 'plugins_api', array( __CLASS__, 'details' ), 20, 3 );
 	}
 
-	/** Neueste Version für WordPress melden; den Versionsvergleich macht WordPress selbst. */
+	/** Nach dem Aktivieren sofort nach Updates suchen, damit «Automatische Aktualisierungen» gleich erscheint. */
+	public static function activate() {
+		delete_site_transient( 'update_plugins' );
+	}
+
+	/**
+	 * Neueste Version für WordPress melden; den Versionsvergleich macht WordPress selbst.
+	 * Ohne Antwort von GitHub meldet es die installierte Version, damit der Schalter
+	 * für automatische Aktualisierungen trotzdem sichtbar bleibt.
+	 */
 	public static function check( $update, $plugin_data, $plugin_file ) {
 		if ( plugin_basename( MLAB_OFFER_FILE ) !== $plugin_file ) {
 			return $update;
 		}
-		$release = self::release();
-		if ( ! $release ) {
-			return $update;
-		}
+		$release = self::release() ?: array(
+			'version' => $plugin_data['Version'],
+			'package' => '',
+		);
 		return array(
 			'slug'         => self::SLUG,
 			'version'      => $release['version'],
