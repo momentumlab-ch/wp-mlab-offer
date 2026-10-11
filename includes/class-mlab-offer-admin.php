@@ -18,6 +18,7 @@ final class MLab_Offer_Admin {
 		add_filter( 'enter_title_here', array( __CLASS__, 'title_placeholder' ), 10, 2 );
 		add_filter( 'use_block_editor_for_post_type', array( __CLASS__, 'no_block_editor' ), 10, 2 );
 		add_action( 'admin_notices', array( __CLASS__, 'capture_hint' ) );
+		add_action( 'admin_post_mlab_offer_toggle', array( __CLASS__, 'toggle' ) );
 	}
 
 	public static function meta_box() {
@@ -78,7 +79,38 @@ final class MLab_Offer_Admin {
 		} elseif ( 'mlab_price' === $col ) {
 			echo esc_html( MLab_Offer::get( $id, 'price' ) ?: '–' );
 		} elseif ( 'mlab_live' === $col ) {
-			echo MLab_Offer::is_visible( $id ) && 'publish' === get_post_status( $id ) ? '✅' : '—';
+			self::visibility_toggle( $id );
 		}
+	}
+
+	/** Sichtbarkeit als Schalter: ein Klick blendet das Angebot ein oder aus. */
+	private static function visibility_toggle( $id ) {
+		$published = 'publish' === get_post_status( $id );
+		if ( ! $published ) {
+			$label = '⬜ Ausgeblendet';
+		} else {
+			$label = MLab_Offer::is_visible( $id ) ? '✅ Sichtbar' : '⏰ Abgelaufen';
+		}
+		if ( ! MLab_Offer::can_toggle( $id ) ) {
+			echo esc_html( $label );
+			return;
+		}
+		$url = wp_nonce_url( admin_url( 'admin-post.php?action=mlab_offer_toggle&id=' . $id ), 'mlab_offer_toggle_' . $id );
+		printf(
+			'<a href="%s" title="%s">%s</a>',
+			esc_url( $url ),
+			esc_attr( $published ? 'Klicken zum Ausblenden' : 'Klicken zum Einblenden' ),
+			esc_html( $label )
+		);
+	}
+
+	public static function toggle() {
+		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
+		check_admin_referer( 'mlab_offer_toggle_' . $id );
+		if ( ! MLab_Offer::toggle( $id ) ) {
+			wp_die( 'Keine Berechtigung.', 403 );
+		}
+		wp_safe_redirect( wp_get_referer() ?: admin_url( 'edit.php?post_type=' . MLab_Offer::CPT ) );
+		exit;
 	}
 }

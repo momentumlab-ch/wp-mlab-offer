@@ -17,6 +17,8 @@ final class MLab_Offer_Capture {
 	const MESSAGES = array(
 		'saved'   => array( 'ok', 'Gespeichert.' ),
 		'trashed' => array( 'ok', 'Angebot gelöscht.' ),
+		'shown'   => array( 'ok', 'Angebot ist jetzt sichtbar.' ),
+		'hidden'  => array( 'ok', 'Angebot ist jetzt ausgeblendet.' ),
 		'image'   => array( 'error', 'Gespeichert, aber das Bild konnte nicht hochgeladen werden. Bitte ein kleineres Foto versuchen.' ),
 	);
 
@@ -77,6 +79,8 @@ final class MLab_Offer_Capture {
 			self::save();
 		} elseif ( 'trash' === $action ) {
 			self::trash();
+		} elseif ( 'toggle' === $action ) {
+			self::toggle();
 		} elseif ( isset( $_GET['angebot'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			self::page( 'Angebot', array( __CLASS__, 'view_form' ) );
 		} else {
@@ -141,6 +145,15 @@ final class MLab_Offer_Capture {
 		}
 		wp_trash_post( $id );
 		self::redirect( 'trashed' );
+	}
+
+	private static function toggle() {
+		$id = self::posted_id();
+		check_admin_referer( 'mlab_offer_toggle_' . $id );
+		if ( ! MLab_Offer::toggle( $id ) ) {
+			wp_die( 'Keine Berechtigung.', 403 );
+		}
+		self::redirect( 'publish' === get_post_status( $id ) ? 'shown' : 'hidden' );
 	}
 
 	private static function can_edit( $id ) {
@@ -231,15 +244,31 @@ final class MLab_Offer_Capture {
 				<li><a href="<?php echo esc_url( self::url( array( 'angebot' => $p->ID ) ) ); ?>">
 					<span class="cap-thumb"><?php echo get_the_post_thumbnail( $p->ID, 'thumbnail', array( 'alt' => '' ) ); ?></span>
 					<span class="cap-meta"><strong><?php echo esc_html( get_the_title( $p ) ?: '(ohne Titel)' ); ?></strong><small><?php echo esc_html( self::status_label( $p ) ); ?></small></span>
-				</a></li>
+				</a><?php self::toggle_form( $p ); ?></li>
 			<?php endforeach; ?>
 		</ul>
 		<?php
 	}
 
+	/** Knopf zum Ein- und Ausblenden direkt in der Liste. */
+	private static function toggle_form( $p ) {
+		if ( ! MLab_Offer::can_toggle( $p->ID ) ) {
+			return;
+		}
+		$published = 'publish' === $p->post_status;
+		?>
+		<form method="post" action="<?php echo esc_url( self::url() ); ?>">
+			<?php wp_nonce_field( 'mlab_offer_toggle_' . $p->ID ); ?>
+			<input type="hidden" name="mlab_action" value="toggle">
+			<input type="hidden" name="id" value="<?php echo (int) $p->ID; ?>">
+			<button class="cap-toggle<?php echo $published ? ' is-on' : ''; ?>" type="submit" aria-pressed="<?php echo $published ? 'true' : 'false'; ?>"><?php echo $published ? 'Sichtbar' : 'Aus'; ?></button>
+		</form>
+		<?php
+	}
+
 	private static function status_label( $p ) {
 		if ( 'publish' !== $p->post_status ) {
-			return 'pending' === $p->post_status ? 'Wartet auf Freigabe' : 'Entwurf';
+			return 'pending' === $p->post_status ? 'Wartet auf Freigabe' : 'Ausgeblendet';
 		}
 		if ( ! MLab_Offer::is_visible( $p->ID ) ) {
 			return 'Abgelaufen, nicht mehr sichtbar';
