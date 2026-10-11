@@ -15,6 +15,9 @@ final class MLab_Offer {
 	const NONCE       = 'mlab_offer_save';
 	const NONCE_FIELD = '_mlab_offer_nonce';
 
+	/** Menü-Icon: assets/menu-icon.svg als Data-URI (fest hinterlegt, damit WordPress es einfärben kann). */
+	const MENU_ICON = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCI+PHBhdGggZmlsbD0iYmxhY2siIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTYgMS41YTEgMSAwIDAgMSAxIDFWM2g2di0uNWExIDEgMCAxIDEgMiAwVjNoMWEyIDIgMCAwIDEgMiAydjExYTIgMiAwIDAgMS0yIDJINGEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgxdi0uNWExIDEgMCAwIDEgMS0xWk00IDd2OWgxMlY3SDRabTEgOCAzLjUtNSAyIDIuNUwxMiAxMC41IDE1IDE1SDVaIi8+PC9zdmc+Cg==';
+
 	/** Bildausschnitt: Schlüssel => [Label, CSS object-position]. */
 	const FOCUS = array(
 		''       => array( 'Mitte', '50% 50%' ),
@@ -70,7 +73,7 @@ final class MLab_Offer {
 				'show_in_menu'    => true,
 				'show_in_rest'    => false,
 				'menu_position'   => 3,
-				'menu_icon'       => is_admin() ? 'data:image/svg+xml;base64,' . base64_encode( (string) file_get_contents( MLAB_OFFER_DIR . 'assets/menu-icon.svg' ) ) : '', // phpcs:ignore WordPress.WP.AlternativeFunctions
+				'menu_icon'       => self::MENU_ICON,
 				'supports'        => array( 'title', 'thumbnail', 'page-attributes' ),
 				'capability_type' => 'post',
 				'map_meta_cap'    => true,
