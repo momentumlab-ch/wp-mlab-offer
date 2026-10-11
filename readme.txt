@@ -41,8 +41,12 @@ Adresse: https://deine-seite.ch/angebote-erfassen/
 - Termine werden als schema.org Event (mit Preis als Offer) ausgegeben, anpassbar per Filter «mlab_offer_event».
 - Buttons mit Link «#anfrage» (Standard) tragen data-anfrage="Titel" für die Vorauswahl im Anfrageformular.
 - Keine öffentlichen URLs für Angebote (public=false).
+- Spalte «Sichtbar» in der Angebotsliste: ein Klick blendet ein Angebot aus (Entwurf) oder wieder ein.
 
 == Changelog ==
+= 2.0.3 =
+* Sichtbarkeit per Klick ein- und ausschalten, in der Angebotsliste im Admin und auf der Handy-Seite.
+
 = 2.0.2 =
 * Name «MomentumLab Angebote».
 * Schalter «Automatische Aktualisierungen aktivieren» erscheint direkt nach dem Aktivieren und auch, wenn GitHub kurz nicht erreichbar ist.

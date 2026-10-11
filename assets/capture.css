@@ -27,9 +27,12 @@ h1{font-size:24px;line-height:1.2;margin:0 0 16px}
 .cap-ok{background:#DDF4E4;color:#14532D}
 .cap-error{background:#FDE7E5;color:#7A1A12}
 .cap-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.cap-list a{display:flex;gap:14px;align-items:center;padding:10px;background:#FFFFFF;border-radius:14px;color:inherit;text-decoration:none;box-shadow:0 1px 0 #DCE5EA}
+.cap-list li{display:flex;align-items:center;gap:10px;padding-right:10px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 0 #DCE5EA}
+.cap-list a{flex:1;min-width:0;display:flex;gap:14px;align-items:center;padding:10px;background:#FFFFFF;border-radius:14px;color:inherit;text-decoration:none}
 .cap-thumb{flex:0 0 64px;height:64px;border-radius:10px;overflow:hidden;background:#2B3D47}
 .cap-thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .cap-meta{display:grid;min-width:0}
 .cap-meta strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cap-meta small{color:#5B6B74;font-size:14px}
+.cap-toggle{min-width:88px;min-height:40px;padding:0 14px;border:1px solid #C5D3DB;border-radius:999px;background:#F6F9FB;color:#5B6B74;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.cap-toggle.is-on{background:#DDF4E4;border-color:#9BD3AE;color:#14532D}

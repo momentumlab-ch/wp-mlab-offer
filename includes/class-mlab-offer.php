@@ -86,6 +86,20 @@ final class MLab_Offer {
 		return current_user_can( get_post_type_object( self::CPT )->cap->$cap );
 	}
 
+	/** Darf der aktuelle Benutzer dieses Angebot ein- und ausblenden? */
+	public static function can_toggle( $id ) {
+		return self::CPT === get_post_type( $id ) && current_user_can( 'edit_post', $id ) && self::can( 'publish_posts' );
+	}
+
+	/** Veröffentlicht ↔ ausgeblendet (Entwurf) umschalten, ohne die Felder zu verändern. */
+	public static function toggle( $id ) {
+		if ( ! self::can_toggle( $id ) ) {
+			return false;
+		}
+		$status = 'publish' === get_post_status( $id ) ? 'draft' : 'publish';
+		return ! is_wp_error( wp_update_post( array( 'ID' => $id, 'post_status' => $status ), true ) );
+	}
+
 	/* ------------------------------------------------------------------ */
 	/* Daten lesen                                                         */
 	/* ------------------------------------------------------------------ */
