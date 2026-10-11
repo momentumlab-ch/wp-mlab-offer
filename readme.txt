@@ -43,6 +43,9 @@ Adresse: https://deine-seite.ch/angebote-erfassen/
 - Keine öffentlichen URLs für Angebote (public=false).
 
 == Changelog ==
+= 2.0.1 =
+* Upload über den Plugin-Installer auf Servern mit strenger Firewall: keine base64-/Datei-Lese-Muster mehr im Code.
+
 = 2.0.0 =
 * Umbenannt zu «MLab Angebote» (Ordner wp-mlab-offer), bestehende Angebote bleiben erhalten.
 * Mobile Erfassung unter /angebote-erfassen mit eigenem Login, ohne WordPress-Menü.

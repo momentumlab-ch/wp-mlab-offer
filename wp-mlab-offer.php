@@ -3,7 +3,7 @@
  * Plugin Name: MLab Angebote
  * Plugin URI: https://github.com/momentumlab-ch/wp-mlab-offer
  * Description: Angebote, Kurse und Termine einfach erfassen (auch vom Smartphone unter /angebote-erfassen) und mit dem Shortcode [mlab_angebote] als Karten anzeigen.
- * Version: 2.0.0
+ * Version: 2.0.1
  * Author: MomentumLab
  * Author URI: https://momentumlab.ch
  * License: GPL-2.0-or-later
@@ -16,7 +16,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Gleiche Version wie im Header oben; der Release-Workflow liest den Header.
-define( 'MLAB_OFFER_VERSION', '2.0.0' );
+define( 'MLAB_OFFER_VERSION', '2.0.1' );
 define( 'MLAB_OFFER_FILE', __FILE__ );
 define( 'MLAB_OFFER_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MLAB_OFFER_URL', plugin_dir_url( __FILE__ ) );
