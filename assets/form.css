@@ -1,0 +1,12 @@
+.mlab-form{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:760px}
+.mlab-f{grid-column:1/-1;display:grid;gap:6px;font-weight:600}
+.mlab-f.mlab-half{grid-column:auto}
+.mlab-f em{display:block;font-style:normal;font-weight:400;color:#646970;font-size:13px}
+.mlab-f input,.mlab-f textarea,.mlab-f select{width:100%;max-width:none;font-size:16px;padding:10px 12px;font-weight:400;box-sizing:border-box}
+.mlab-help{margin:0 0 12px;color:#50575e}
+.mlab-dates{display:grid;gap:8px}
+.mlab-date{display:flex;gap:8px}
+.mlab-date input{flex:1}
+.mlab-form .button{min-height:44px;min-width:44px;padding:0 14px}
+.mlab-add{justify-self:start}
+@media (max-width:782px){.mlab-f.mlab-half{grid-column:1/-1}}
