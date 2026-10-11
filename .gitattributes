@@ -1,0 +1,3 @@
+# Nicht ins Plugin-ZIP packen.
+/.github export-ignore
+/.gitattributes export-ignore

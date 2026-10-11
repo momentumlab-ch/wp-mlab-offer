@@ -1,0 +1,46 @@
+# Erstellt automatisch ein GitHub-Release, sobald auf «main» eine neue Version
+# im Plugin-Header (wp-mlab-offer.php > «Version:») steht. WordPress-Seiten mit
+# dem Plugin sehen das Update danach unter Dashboard > Aktualisierungen.
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version lesen
+        id: version
+        run: |
+          header=$(grep -m1 -oP '^\s*\*\s*Version:\s*\K[0-9][0-9.]*' wp-mlab-offer.php)
+          constant=$(grep -m1 -oP "MLAB_OFFER_VERSION', '\K[0-9.]+" wp-mlab-offer.php)
+          if [ "$header" != "$constant" ]; then
+            echo "::error::Version im Header ($header) und MLAB_OFFER_VERSION ($constant) stimmen nicht überein."
+            exit 1
+          fi
+          echo "tag=v$header" >> "$GITHUB_OUTPUT"
+
+      - name: Prüfen, ob das Release schon existiert
+        id: exists
+        run: |
+          if gh release view "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: ZIP (Ordner wp-mlab-offer) als Release veröffentlichen
+        if: steps.exists.outputs.skip != 'true'
+        run: |
+          mkdir -p build
+          git archive --format=zip --prefix=wp-mlab-offer/ -o build/wp-mlab-offer.zip HEAD
+          gh release create "${{ steps.version.outputs.tag }}" build/wp-mlab-offer.zip \
+            --title "${{ steps.version.outputs.tag }}" --target "$GITHUB_SHA" --generate-notes
